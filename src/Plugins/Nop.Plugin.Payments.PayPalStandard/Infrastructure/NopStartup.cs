@@ -21,6 +21,7 @@ namespace Nop.Plugin.Payments.PayPalStandard.Infrastructure
         {
             //client to request PayPal services
             services.AddHttpClient<PayPalStandardHttpClient>().WithProxy();
+            services.AddTransient<PayPalStandardPaymentService>();
         }
 
         /// <summary>

@@ -26,13 +26,6 @@ namespace Nop.Services.Payments
         Task<ProcessPaymentResult> ProcessPaymentAsync(ProcessPaymentRequest processPaymentRequest);
 
         /// <summary>
-        /// Post process payment (used by payment gateways that require redirecting to a third-party URL)
-        /// </summary>
-        /// <param name="postProcessPaymentRequest">Payment info required for an order processing</param>
-        /// <returns>A task that represents the asynchronous operation</returns>
-        Task PostProcessPaymentAsync(PostProcessPaymentRequest postProcessPaymentRequest);
-
-        /// <summary>
         /// Returns a value indicating whether payment method should be hidden during checkout
         /// </summary>
         /// <param name="cart">Shopping cart</param>
@@ -103,16 +96,6 @@ namespace Nop.Services.Payments
         Task<CancelRecurringPaymentResult> CancelRecurringPaymentAsync(CancelRecurringPaymentRequest cancelPaymentRequest);
 
         /// <summary>
-        /// Gets a value indicating whether customers can complete a payment after order is placed but not completed (for redirection payment methods)
-        /// </summary>
-        /// <param name="order">Order</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation
-        /// The task result contains the result
-        /// </returns>
-        Task<bool> CanRePostProcessPaymentAsync(Order order);
-
-        /// <summary>
         /// Validate payment form
         /// </summary>
         /// <param name="form">The parsed form values</param>
@@ -136,7 +119,19 @@ namespace Nop.Services.Payments
         /// Gets the <see cref="Type"/> of the <see cref="ViewComponent"/> for displaying plugin in public store ("payment info" checkout step)
         /// </summary>
         /// <returns>The <see cref="Type"/> of the <see cref="ViewComponent"/>.</returns>
-        Type GetPublicViewComponentType();
+        Type GetPaymentInfoViewComponentType();
+
+        /// <summary>
+        /// Gets the <see cref="Type"/> of the <see cref="ViewComponent"/> for displaying plugin in public store (during checkout completed)
+        /// </summary>
+        /// <returns>The <see cref="Type"/> of the <see cref="ViewComponent"/>.</returns>
+        Type GetCheckoutCompletedViewComponentType();
+
+        /// <summary>
+        /// Gets the <see cref="Type"/> of the <see cref="ViewComponent"/> for displaying plugin in public store (in order details page)
+        /// </summary>
+        /// <returns>The <see cref="Type"/> of the <see cref="ViewComponent"/>.</returns>
+        Type GetOrderDetailsViewComponentType();
 
         /// <summary>
         /// Gets a payment method description that will be displayed on checkout pages in the public store

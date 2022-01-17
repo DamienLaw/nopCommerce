@@ -87,61 +87,6 @@ namespace Nop.Services.Payments
         }
 
         /// <summary>
-        /// Post process payment (used by payment gateways that require redirecting to a third-party URL)
-        /// </summary>
-        /// <param name="postProcessPaymentRequest">Payment info required for an order processing</param>
-        /// <returns>A task that represents the asynchronous operation</returns>
-        public virtual async Task PostProcessPaymentAsync(PostProcessPaymentRequest postProcessPaymentRequest)
-        {
-            //already paid or order.OrderTotal == decimal.Zero
-            if (postProcessPaymentRequest.Order.PaymentStatus == PaymentStatus.Paid)
-                return;
-
-            var customer = await _customerService.GetCustomerByIdAsync(postProcessPaymentRequest.Order.CustomerId);
-            var paymentMethod = await _paymentPluginManager
-                .LoadPluginBySystemNameAsync(postProcessPaymentRequest.Order.PaymentMethodSystemName, customer, postProcessPaymentRequest.Order.StoreId)
-                ?? throw new NopException("Payment method couldn't be loaded");
-
-            await paymentMethod.PostProcessPaymentAsync(postProcessPaymentRequest);
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether customers can complete a payment after order is placed but not completed (for redirection payment methods)
-        /// </summary>
-        /// <param name="order">Order</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation
-        /// The task result contains the result
-        /// </returns>
-        public virtual async Task<bool> CanRePostProcessPaymentAsync(Order order)
-        {
-            if (order == null)
-                throw new ArgumentNullException(nameof(order));
-
-            if (!_paymentSettings.AllowRePostingPayments)
-                return false;
-
-            var customer = await _customerService.GetCustomerByIdAsync(order.CustomerId);
-            var paymentMethod = await _paymentPluginManager.LoadPluginBySystemNameAsync(order.PaymentMethodSystemName, customer, order.StoreId);
-            if (paymentMethod == null)
-                return false; //Payment method couldn't be loaded (for example, was uninstalled)
-
-            if (paymentMethod.PaymentMethodType != PaymentMethodType.Redirection)
-                return false;   //this option is available only for redirection payment methods
-
-            if (order.Deleted)
-                return false;  //do not allow for deleted orders
-
-            if (order.OrderStatus == OrderStatus.Cancelled)
-                return false;  //do not allow for cancelled orders
-
-            if (order.PaymentStatus != PaymentStatus.Pending)
-                return false;  //payment status should be Pending
-
-            return await paymentMethod.CanRePostProcessPaymentAsync(order);
-        }
-
-        /// <summary>
         /// Gets an additional handling fee of a payment method
         /// </summary>
         /// <param name="cart">Shopping cart</param>

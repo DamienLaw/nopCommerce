@@ -55,9 +55,9 @@
         <div class="order-details-area">
             <div class="billing-info-wrap">
                 <div class="billing-info">
-	                <div class="title">
-	                    <strong>@T("Order.BillingAddress")</strong>
-	                </div>
+                    <div class="title">
+                        <strong>@T("Order.BillingAddress")</strong>
+                    </div>
                     <ul class="info-list">
                         <li class="name">
                             @Model.BillingAddress.FirstName @Model.BillingAddress.LastName
@@ -200,16 +200,10 @@
                                     </span>
                                 </li>
                             }
-                            @if (!Model.PrintMode && Model.CanRePostProcessPayment)
-                            {
-                                @*Complete payment (for redirection payment methods)*@
-                                <li class="repost">
-                                    <form asp-route="OrderDetails" method="post">
-                                        <button type="submit" name="repost-payment" class="button-2 re-order-button">@T("Order.RetryPayment")</button>
-                                        <p class="hint">
-                                            <em>@T("Order.RetryPayment.Hint")</em>
-                                        </p>
-                                    </form>
+                            @if (!Model.PrintMode && Model.PaymentViewComponentType != null)
+                            {                                
+                                <li class="payment-method-view">
+                                    @await Component.InvokeAsync(Model.PaymentViewComponentType, new { orderId = Model.Id })
                                 </li>
                             }
                         </ul>
@@ -220,9 +214,9 @@
             {
                 <div class="shipping-info-wrap">
                     <div class="shipping-info">
-	                    <div class="title">
-	                        <strong>@(Model.PickupInStore ? T("Order.PickupAddress") : T("Order.ShippingAddress"))</strong>
-	                    </div>
+                        <div class="title">
+                            <strong>@(Model.PickupInStore ? T("Order.PickupAddress") : T("Order.ShippingAddress"))</strong>
+                        </div>
                         <ul class="info-list">
                             @if (!Model.PickupInStore)
                             {

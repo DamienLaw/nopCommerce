@@ -1,0 +1,24 @@
+﻿@using Nop.Plugin.Payments.CheckMoneyOrder.Models
+@model OrderDetailsModel
+@{
+    Layout = "";
+}
+
+<link rel="stylesheet" href="~/lib_npm/magnific-popup/magnific-popup.css" />
+<script asp-exclude-from-bundle="true" src="~/lib_npm/magnific-popup/jquery.magnific-popup.min.js" asp-location="Footer"></script>
+
+<a href="#payment-instructions-popup" class="button-2 payment-instructions-button">@T("Plugins.Payment.CheckMoneyOrder.PaymentInstructions")</a>
+
+<div id="payment-instructions-popup" class="payment-instructions-popup mfp-hide">
+    @Html.Raw(Model.DescriptionText)
+</div>
+
+<script asp-location="Footer">
+    $(document).ready(function () {
+        $(".payment-instructions-button").magnificPopup({
+            type: "inline",
+            removalDelay: 500,
+            mainClass: "mfp-fade"
+        });
+    });
+</script>

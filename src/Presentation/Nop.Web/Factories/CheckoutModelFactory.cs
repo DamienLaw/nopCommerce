@@ -548,7 +548,7 @@ namespace Nop.Web.Factories
         {
             return Task.FromResult(new CheckoutPaymentInfoModel
             {
-                PaymentViewComponentType = paymentMethod.GetPublicViewComponentType(),
+                PaymentViewComponentType = paymentMethod.GetPaymentInfoViewComponentType(),
                 DisplayOrderTotals = _orderSettings.OnePageCheckoutDisplayOrderTotalsOnPaymentInfoTab
             });
         }
@@ -587,19 +587,25 @@ namespace Nop.Web.Factories
         /// A task that represents the asynchronous operation
         /// The task result contains the checkout completed model
         /// </returns>
-        public virtual Task<CheckoutCompletedModel> PrepareCheckoutCompletedModelAsync(Order order)
+        public virtual async Task<CheckoutCompletedModel> PrepareCheckoutCompletedModelAsync(Order order)
         {
             if (order == null)
                 throw new ArgumentNullException(nameof(order));
+
+            var customer = await _workContext.GetCurrentCustomerAsync();
+            var store = await _storeContext.GetCurrentStoreAsync();
+            var paymentMethod = await _paymentPluginManager
+                .LoadPluginBySystemNameAsync(order.PaymentMethodSystemName, customer, store.Id);
 
             var model = new CheckoutCompletedModel
             {
                 OrderId = order.Id,
                 OnePageCheckoutEnabled = _orderSettings.OnePageCheckoutEnabled,
-                CustomOrderNumber = order.CustomOrderNumber
+                CustomOrderNumber = order.CustomOrderNumber,
+                PaymentViewComponentType = paymentMethod?.GetCheckoutCompletedViewComponentType()
             };
 
-            return Task.FromResult(model);
+            return model;
         }
 
         /// <summary>

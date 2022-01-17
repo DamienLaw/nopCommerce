@@ -1149,11 +1149,7 @@ namespace Nop.Web.Controllers
                 if (placeOrderResult.Success)
                 {
                     HttpContext.Session.Set<ProcessPaymentRequest>("OrderPaymentInfo", null);
-                    var postProcessPaymentRequest = new PostProcessPaymentRequest
-                    {
-                        Order = placeOrderResult.PlacedOrder
-                    };
-                    await _paymentService.PostProcessPaymentAsync(postProcessPaymentRequest);
+                    await _paymentService.ProcessPaymentAsync(processPaymentRequest);
 
                     if (_webHelper.IsRequestBeingRedirected || _webHelper.IsPostBeingDone)
                     {
@@ -1867,14 +1863,9 @@ namespace Nop.Web.Controllers
                     NopCustomerDefaults.SelectedPaymentMethodAttribute, store.Id);
                 HttpContext.Session.Set<ProcessPaymentRequest>("OrderPaymentInfo", processPaymentRequest);
                 var placeOrderResult = await _orderProcessingService.PlaceOrderAsync(processPaymentRequest);
+                HttpContext.Session.Set<ProcessPaymentRequest>("OrderPaymentInfo", processPaymentRequest); // update the session after placing order because it'll be retrieved again after redirection
                 if (placeOrderResult.Success)
                 {
-                    HttpContext.Session.Set<ProcessPaymentRequest>("OrderPaymentInfo", null);
-                    var postProcessPaymentRequest = new PostProcessPaymentRequest
-                    {
-                        Order = placeOrderResult.PlacedOrder
-                    };
-
                     var paymentMethod = await _paymentPluginManager
                         .LoadPluginBySystemNameAsync(placeOrderResult.PlacedOrder.PaymentMethodSystemName, customer, store.Id);
                     if (paymentMethod == null)
@@ -1890,11 +1881,12 @@ namespace Nop.Web.Controllers
                         //redirect
                         return Json(new
                         {
-                            redirect = $"{_webHelper.GetStoreLocation()}checkout/OpcCompleteRedirectionPayment"
+                            redirect = $"{_webHelper.GetStoreLocation()}checkout/OpcCompleteRedirectionPayment/{placeOrderResult.PlacedOrder.Id}"
                         });
                     }
 
-                    await _paymentService.PostProcessPaymentAsync(postProcessPaymentRequest);
+                    HttpContext.Session.Set<ProcessPaymentRequest>("OrderPaymentInfo", null);
+
                     //success
                     return Json(new { success = 1 });
                 }
@@ -1921,7 +1913,8 @@ namespace Nop.Web.Controllers
             }
         }
 
-        public virtual async Task<IActionResult> OpcCompleteRedirectionPayment()
+        [HttpGet("[controller]/[action]/{orderId}")]
+        public virtual async Task<IActionResult> OpcCompleteRedirectionPayment(int orderId)
         {
             try
             {
@@ -1935,8 +1928,7 @@ namespace Nop.Web.Controllers
 
                 //get the order
                 var store = await _storeContext.GetCurrentStoreAsync();
-                var order = (await _orderService.SearchOrdersAsync(storeId: store.Id,
-                customerId: customer.Id, pageSize: 1)).FirstOrDefault();
+                var order = await _orderService.GetOrderByIdAsync(orderId);
                 if (order == null)
                     return RedirectToRoute("Homepage");
 
@@ -1953,12 +1945,12 @@ namespace Nop.Web.Controllers
 
                 //Redirection will not work on one page checkout page because it's AJAX request.
                 //That's why we process it here
-                var postProcessPaymentRequest = new PostProcessPaymentRequest
-                {
-                    Order = order
-                };
+                var processPaymentRequest = HttpContext.Session.Get<ProcessPaymentRequest>("OrderPaymentInfo");
+                if (processPaymentRequest == null)
+                    return RedirectToRoute("CheckoutCompleted", new { orderId = order.Id });
+                await _paymentService.ProcessPaymentAsync(processPaymentRequest);
 
-                await _paymentService.PostProcessPaymentAsync(postProcessPaymentRequest);
+                HttpContext.Session.Set<ProcessPaymentRequest>("OrderPaymentInfo", null);
 
                 if (_webHelper.IsRequestBeingRedirected || _webHelper.IsPostBeingDone)
                 {

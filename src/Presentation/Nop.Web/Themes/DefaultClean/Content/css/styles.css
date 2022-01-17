@@ -1240,7 +1240,7 @@ label, label + * {
   line-height: 28px;
 }
 /*.newsletter-validation .please-wait {
-	display: none !important; 
+  display: none !important; 
 }*/
 
 .footer-lower {
@@ -5111,7 +5111,7 @@ label, label + * {
   color: #4ab2f1;
 }
 
-.order-details-page .repost .button-2 {
+.order-details-page .payment-method-view .button-2 {
   display: inline-block;
   margin: 10px 0;
   border: none;
@@ -5122,8 +5122,8 @@ label, label + * {
   text-transform: uppercase;
 }
 
-.order-details-page .repost .button-2:hover,
-.order-details-page .repost .button-2:focus {
+.order-details-page .payment-method-view .button-2:hover,
+.order-details-page .payment-method-view .button-2:focus {
   background-color: #248ece;
 }
 
@@ -6524,10 +6524,52 @@ pre {
   color: #666;
 }
 
+/* Magnific Popup */
+/* overlay at start */
+.mfp-fade.mfp-bg {
+  opacity: 0;
+  -webkit-transition: all 0.15s ease-out;
+  -moz-transition: all 0.15s ease-out;
+  transition: all 0.15s ease-out;
+}
+  /* overlay animate in */
+  .mfp-fade.mfp-bg.mfp-ready {
+    opacity: 0.8;
+  }
+  /* overlay animate out */
+  .mfp-fade.mfp-bg.mfp-removing {
+    opacity: 0;
+  }
 
+/* content at start */
+.mfp-fade.mfp-wrap .mfp-content {
+  padding: 25px;
+  position: relative;
+  background: #fff;
+  width: auto;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+
+  opacity: 0;
+  -webkit-transition: all 0.15s ease-out;
+  -moz-transition: all 0.15s ease-out;
+  transition: all 0.15s ease-out;
+}
+/* content animate it */
+.mfp-fade.mfp-wrap.mfp-ready .mfp-content {
+  opacity: 1;
+}
+/* content animate out */
+.mfp-fade.mfp-wrap.mfp-removing .mfp-content {
+  opacity: 0;
+}
+
+.mfp-fade.mfp-wrap .mfp-content p {
+    margin-top: 8px;
+}
 
 @media all and (max-width: 769px) {
-
   .review-rating .name-description {
     text-align: center;
     width: 100%;
@@ -6557,9 +6599,6 @@ pre {
     padding-top: 8px;
   }
 }
-
-
-
 
 
 @media all and (max-width: 1000px) {
@@ -6773,9 +6812,6 @@ pre {
     text-align: center;
   }
 }
-
-
-
 
 
 @media all and (min-width: 481px) {
@@ -7655,9 +7691,6 @@ pre {
     text-align: left;
   }
 }
-
-
-
 
 
 @media all and (min-width: 1001px) {
@@ -8590,9 +8623,6 @@ pre {
     vertical-align: middle;
   }
 }
-
-
-
 
 
 @media all and (min-width: 1367px) {

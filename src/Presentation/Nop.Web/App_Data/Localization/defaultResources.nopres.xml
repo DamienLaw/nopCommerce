@@ -17694,12 +17694,6 @@
   <LocaleResource Name="Order.Reorder">
     <Value>Re-order</Value>
   </LocaleResource>
-  <LocaleResource Name="Order.RetryPayment">
-    <Value>Retry payment</Value>
-  </LocaleResource>
-  <LocaleResource Name="Order.RetryPayment.Hint">
-    <Value>This order is not yet paid for. To pay now, click the "Retry payment" button.</Value>
-  </LocaleResource>
   <LocaleResource Name="Order.ReturnItems">
     <Value>Return Item(s)</Value>
   </LocaleResource>

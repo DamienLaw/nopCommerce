@@ -137,16 +137,6 @@ namespace Nop.Plugin.Payments.PayPalCommerce
         }
 
         /// <summary>
-        /// Post process payment (used by payment gateways that require redirecting to a third-party URL)
-        /// </summary>
-        /// <param name="postProcessPaymentRequest">Payment info required for an order processing</param>
-        /// <returns>A task that represents the asynchronous operation</returns>
-        public Task PostProcessPaymentAsync(PostProcessPaymentRequest postProcessPaymentRequest)
-        {
-            return Task.CompletedTask;
-        }
-
-        /// <summary>
         /// Captures payment
         /// </summary>
         /// <param name="capturePaymentRequest">Capture payment request</param>
@@ -312,19 +302,6 @@ namespace Nop.Plugin.Payments.PayPalCommerce
         }
 
         /// <summary>
-        /// Gets a value indicating whether customers can complete a payment after order is placed but not completed (for redirection payment methods)
-        /// </summary>
-        /// <param name="order">Order</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation
-        /// The task result contains the result
-        /// </returns>
-        public Task<bool> CanRePostProcessPaymentAsync(Order order)
-        {
-            return Task.FromResult(false);
-        }
-
-        /// <summary>
         /// Validate payment form
         /// </summary>
         /// <param name="form">The parsed form values</param>
@@ -375,7 +352,19 @@ namespace Nop.Plugin.Payments.PayPalCommerce
         /// <summary>
         /// Gets the <see cref="Type"/> of the <see cref="ViewComponent"/> for displaying plugin in public store ("payment info" checkout step)
         /// </summary>
-        public Type GetPublicViewComponentType() => typeof(PaymentInfoViewComponent);
+        public Type GetPaymentInfoViewComponentType() => typeof(PaymentInfoViewComponent);
+
+        /// <summary>
+        /// Gets the <see cref="Type"/> of the <see cref="ViewComponent"/> for displaying plugin in public store (during checkout completed)
+        /// </summary>
+        /// <returns>The <see cref="Type"/> of the <see cref="ViewComponent"/>.</returns>
+        public Type GetCheckoutCompletedViewComponentType() => null;
+
+        /// <summary>
+        /// Gets the <see cref="Type"/> of the <see cref="ViewComponent"/> for displaying plugin in public store (in order details page)
+        /// </summary>
+        /// <returns>The <see cref="Type"/> of the <see cref="ViewComponent"/>.</returns>
+        public Type GetOrderDetailsViewComponentType() => null;
 
         /// <summary>
         /// Gets widget zones where this widget should be rendered

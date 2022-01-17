@@ -1,0 +1,12 @@
+﻿@using Nop.Plugin.Payments.PayPalStandard.Models
+@model PaymentRePostModel
+@{
+    Layout = "";
+}
+<form asp-controller="PaymentPayPalStandard" asp-action="RePostPayment" method="post">
+    <button type="submit" class="button-2 re-post-button">@T("Plugins.Payments.PayPalStandard.Order.RetryPayment")</button>
+    <p class="hint">
+        <em>@T("Plugins.Payments.PayPalStandard.Order.RetryPayment.Hint")</em>
+    </p>
+    @Html.HiddenFor(m => m.OrderId)
+</form>

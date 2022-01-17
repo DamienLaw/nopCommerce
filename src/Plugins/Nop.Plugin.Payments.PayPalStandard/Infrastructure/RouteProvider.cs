@@ -23,6 +23,10 @@ namespace Nop.Plugin.Payments.PayPalStandard.Infrastructure
             //Cancel
             endpointRouteBuilder.MapControllerRoute("Plugin.Payments.PayPalStandard.CancelOrder", "Plugins/PaymentPayPalStandard/CancelOrder",
                  new { controller = "PaymentPayPalStandard", action = "CancelOrder" });
+
+            //RePost
+            endpointRouteBuilder.MapControllerRoute("Plugin.Payments.PayPalStandard.RePostPayment", "Plugins/PaymentPayPalStandard/RePostPayment",
+                 new { controller = "PaymentPayPalStandard", action = "RePostPayment" });
         }
 
         /// <summary>

@@ -49,7 +49,7 @@ namespace Nop.Web.Models.Order
 
         public string PaymentMethod { get; set; }
         public string PaymentMethodStatus { get; set; }
-        public bool CanRePostProcessPayment { get; set; }
+        public Type PaymentViewComponentType { get; set; }
         public Dictionary<string, object> CustomValues { get; set; }
 
         public string OrderSubtotal { get; set; }
@@ -137,6 +137,6 @@ namespace Nop.Web.Models.Order
             public DateTime? DeliveryDate { get; set; }
         }
 
-		#endregion
+        #endregion
     }
 }

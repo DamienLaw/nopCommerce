@@ -1,4 +1,5 @@
-﻿using Nop.Web.Framework.Models;
+﻿using System;
+using Nop.Web.Framework.Models;
 
 namespace Nop.Web.Models.Checkout
 {
@@ -7,5 +8,6 @@ namespace Nop.Web.Models.Checkout
         public int OrderId { get; set; }
         public string CustomOrderNumber { get; set; }
         public bool OnePageCheckoutEnabled { get; set; }
+        public Type PaymentViewComponentType { get; set; }
     }
 }

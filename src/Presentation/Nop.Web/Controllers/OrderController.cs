@@ -37,7 +37,7 @@ namespace Nop.Web.Controllers
 
         #endregion
 
-		#region Ctor
+        #region Ctor
 
         public OrderController(ICustomerService customerService,
             IOrderModelFactory orderModelFactory,
@@ -214,10 +214,9 @@ namespace Nop.Web.Controllers
             await _orderProcessingService.ReOrderAsync(order);
             return RedirectToRoute("ShoppingCart");
         }
-
+        /*
         //My account / Order details page / Complete payment
-        [HttpPost, ActionName("Details")]
-        
+        [HttpPost, ActionName("Details")]        
         [FormValueRequired("repost-payment")]
         public virtual async Task<IActionResult> RePostPayment(int orderId)
         {
@@ -245,7 +244,7 @@ namespace Nop.Web.Controllers
             //theoretically it's not possible
             return RedirectToRoute("OrderDetails", new { orderId = orderId });
         }
-
+        */
         //My account / Order details page / Shipment details page
         public virtual async Task<IActionResult> ShipmentDetails(int shipmentId)
         {

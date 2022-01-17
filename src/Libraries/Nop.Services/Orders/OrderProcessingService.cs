@@ -1496,8 +1496,18 @@ namespace Nop.Services.Orders
                     };
                 }
                 else
+                {
                     //standard cart
+                    if (paymentMethod.PaymentMethodType == PaymentMethodType.Redirection)
+                    {
+                        // for payment plugins that redirect, do not allow plugin to process payment first.
+                        // the redirection won't work if this is an AJAX request, therefore just return success.
+                        // redirections will be handled later in the flow.
+                        return new ProcessPaymentResult();
+                    }
+                    
                     processPaymentResult = await _paymentService.ProcessPaymentAsync(processPaymentRequest);
+                }                    
             }
             else
                 //payment is not required

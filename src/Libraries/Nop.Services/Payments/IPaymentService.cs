@@ -18,24 +18,7 @@ namespace Nop.Services.Payments
         /// The task result contains the process payment result
         /// </returns>
         Task<ProcessPaymentResult> ProcessPaymentAsync(ProcessPaymentRequest processPaymentRequest);
-
-        /// <summary>
-        /// Post process payment (used by payment gateways that require redirecting to a third-party URL)
-        /// </summary>
-        /// <param name="postProcessPaymentRequest">Payment info required for an order processing</param>
-        /// <returns>A task that represents the asynchronous operation</returns>
-        Task PostProcessPaymentAsync(PostProcessPaymentRequest postProcessPaymentRequest);
-
-        /// <summary>
-        /// Gets a value indicating whether customers can complete a payment after order is placed but not completed (for redirection payment methods)
-        /// </summary>
-        /// <param name="order">Order</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation
-        /// The task result contains the result
-        /// </returns>
-        Task<bool> CanRePostProcessPaymentAsync(Order order);
-
+                
         /// <summary>
         /// Gets an additional handling fee of a payment method
         /// </summary>

@@ -3,7 +3,7 @@ using Nop.Web.Framework.Components;
 
 namespace Nop.Plugin.Payments.PayPalStandard.Components
 {
-    public class PaymentPayPalStandardViewComponent : NopViewComponent
+    public class PaymentInfoViewComponent : NopViewComponent
     {
         public IViewComponentResult Invoke()
         {

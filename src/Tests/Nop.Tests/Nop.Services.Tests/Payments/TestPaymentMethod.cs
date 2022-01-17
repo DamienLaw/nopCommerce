@@ -65,20 +65,6 @@ namespace Nop.Tests.Nop.Services.Tests.Payments
             
             return Task.FromResult(result);
         }
-        
-        /// <summary>
-        /// Gets a value indicating whether customers can complete a payment after order is placed but not completed (for redirection payment methods)
-        /// </summary>
-        /// <param name="order">Order</param>
-        /// <returns>Result</returns>
-        public Task<bool> CanRePostProcessPaymentAsync(Order order)
-        {
-            if (order == null)
-                throw new ArgumentNullException(nameof(order));
-
-            //it's not a redirection payment method. So we always return false
-            return Task.FromResult(false);
-        }
 
         /// <summary>
         /// Validate payment form
@@ -113,15 +99,6 @@ namespace Nop.Tests.Nop.Services.Tests.Payments
             };
 
             return Task.FromResult(result);
-        }
-
-        /// <summary>
-        /// Post process payment (used by payment gateways that require redirecting to a third-party URL)
-        /// </summary>
-        /// <param name="postProcessPaymentRequest">Payment info required for an order processing</param>
-        public Task PostProcessPaymentAsync(PostProcessPaymentRequest postProcessPaymentRequest)
-        {
-            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -161,10 +138,19 @@ namespace Nop.Tests.Nop.Services.Tests.Payments
         /// Gets the <see cref="Type"/> of the <see cref="ViewComponent"/> for displaying plugin in public store ("payment info" checkout step)
         /// </summary>
         /// <returns>The <see cref="Type"/> of the <see cref="ViewComponent"/>.</returns>
-        public Type GetPublicViewComponentType()
-        {
-            return null;
-        }
+        public Type GetPaymentInfoViewComponentType() => null;        
+
+        /// <summary>
+        /// Gets the <see cref="Type"/> of the <see cref="ViewComponent"/> for displaying plugin in public store (during checkout completed)
+        /// </summary>
+        /// <returns>The <see cref="Type"/> of the <see cref="ViewComponent"/>.</returns>
+        public Type GetCheckoutCompletedViewComponentType() => null;
+
+        /// <summary>
+        /// Gets the <see cref="Type"/> of the <see cref="ViewComponent"/> for displaying plugin in public store (in order details page)
+        /// </summary>
+        /// <returns>The <see cref="Type"/> of the <see cref="ViewComponent"/>.</returns>
+        public Type GetOrderDetailsViewComponentType() => null;
 
         public Task<string> GetPaymentMethodDescriptionAsync()
         {

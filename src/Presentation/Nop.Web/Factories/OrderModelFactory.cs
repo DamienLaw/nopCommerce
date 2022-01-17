@@ -289,7 +289,7 @@ namespace Nop.Web.Factories
                 .LoadPluginBySystemNameAsync(order.PaymentMethodSystemName, customer, order.StoreId);
             model.PaymentMethod = paymentMethod != null ? await _localizationService.GetLocalizedFriendlyNameAsync(paymentMethod, languageId) : order.PaymentMethodSystemName;
             model.PaymentMethodStatus = await _localizationService.GetLocalizedEnumAsync(order.PaymentStatus);
-            model.CanRePostProcessPayment = await _paymentService.CanRePostProcessPaymentAsync(order);
+            model.PaymentViewComponentType = paymentMethod.GetOrderDetailsViewComponentType();
             //custom values
             model.CustomValues = _paymentService.DeserializeCustomValues(order);
 

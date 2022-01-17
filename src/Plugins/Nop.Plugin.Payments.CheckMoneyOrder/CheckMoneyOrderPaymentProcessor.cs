@@ -65,17 +65,6 @@ namespace Nop.Plugin.Payments.CheckMoneyOrder
         }
 
         /// <summary>
-        /// Post process payment (used by payment gateways that require redirecting to a third-party URL)
-        /// </summary>
-        /// <param name="postProcessPaymentRequest">Payment info required for an order processing</param>
-        /// <returns>A task that represents the asynchronous operation</returns>
-        public Task PostProcessPaymentAsync(PostProcessPaymentRequest postProcessPaymentRequest)
-        {
-            //nothing
-            return Task.CompletedTask;
-        }
-
-        /// <summary>
         /// Returns a value indicating whether payment method should be hidden during checkout
         /// </summary>
         /// <param name="cart">Shopping cart</param>
@@ -175,23 +164,6 @@ namespace Nop.Plugin.Payments.CheckMoneyOrder
         }
 
         /// <summary>
-        /// Gets a value indicating whether customers can complete a payment after order is placed but not completed (for redirection payment methods)
-        /// </summary>
-        /// <param name="order">Order</param>
-        /// <returns>
-        /// A task that represents the asynchronous operation
-        /// The task result contains the result
-        /// </returns>
-        public Task<bool> CanRePostProcessPaymentAsync(Order order)
-        {
-            if (order == null)
-                throw new ArgumentNullException(nameof(order));
-
-            //it's not a redirection payment method. So we always return false
-            return Task.FromResult(false);
-        }
-
-        /// <summary>
         /// Validate payment form
         /// </summary>
         /// <param name="form">The parsed form values</param>
@@ -229,7 +201,19 @@ namespace Nop.Plugin.Payments.CheckMoneyOrder
         /// Gets the <see cref="Type"/> of the <see cref="ViewComponent"/> for displaying plugin in public store ("payment info" checkout step)
         /// </summary>
         /// <returns>The <see cref="Type"/> of the <see cref="ViewComponent"/>.</returns>
-        public Type GetPublicViewComponentType() => typeof(CheckMoneyOrderViewComponent);
+        public Type GetPaymentInfoViewComponentType() => typeof(CheckMoneyOrderPaymentInfoViewComponent);
+
+        /// <summary>
+        /// Gets the <see cref="Type"/> of the <see cref="ViewComponent"/> for displaying plugin in public store (during checkout completed)
+        /// </summary>
+        /// <returns>The <see cref="Type"/> of the <see cref="ViewComponent"/>.</returns>
+        public Type GetCheckoutCompletedViewComponentType() => null;
+
+        /// <summary>
+        /// Gets the <see cref="Type"/> of the <see cref="ViewComponent"/> for displaying plugin in public store (in order details page)
+        /// </summary>
+        /// <returns>The <see cref="Type"/> of the <see cref="ViewComponent"/>.</returns>
+        public Type GetOrderDetailsViewComponentType() => typeof(CheckMoneyOrderOrderDetailsViewComponent);
 
         /// <summary>
         /// Install the plugin
@@ -255,7 +239,8 @@ namespace Nop.Plugin.Payments.CheckMoneyOrder
                 ["Plugins.Payment.CheckMoneyOrder.DescriptionText.Hint"] = "Enter info that will be shown to customers during checkout",
                 ["Plugins.Payment.CheckMoneyOrder.PaymentMethodDescription"] = "Pay by cheque or money order",
                 ["Plugins.Payment.CheckMoneyOrder.ShippableProductRequired"] = "Shippable product required",
-                ["Plugins.Payment.CheckMoneyOrder.ShippableProductRequired.Hint"] = "An option indicating whether shippable products are required in order to display this payment method during checkout."
+                ["Plugins.Payment.CheckMoneyOrder.ShippableProductRequired.Hint"] = "An option indicating whether shippable products are required in order to display this payment method during checkout.",
+                ["Plugins.Payment.CheckMoneyOrder.PaymentInstructions"] = "Payment instructions",
             });
 
             await base.InstallAsync();

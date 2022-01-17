@@ -8,6 +8,7 @@ using Nop.Core;
 using Nop.Core.Domain.Orders;
 using Nop.Core.Domain.Payments;
 using Nop.Plugin.Payments.PayPalStandard.Models;
+using Nop.Plugin.Payments.PayPalStandard.Services;
 using Nop.Services.Common;
 using Nop.Services.Configuration;
 using Nop.Services.Localization;
@@ -40,6 +41,7 @@ namespace Nop.Plugin.Payments.PayPalStandard.Controllers
         private readonly IWebHelper _webHelper;
         private readonly IWorkContext _workContext;
         private readonly ShoppingCartSettings _shoppingCartSettings;
+        private readonly PayPalStandardPaymentService _paymentService;
 
         #endregion
 
@@ -57,7 +59,8 @@ namespace Nop.Plugin.Payments.PayPalStandard.Controllers
             IStoreContext storeContext,
             IWebHelper webHelper,
             IWorkContext workContext,
-            ShoppingCartSettings shoppingCartSettings)
+            ShoppingCartSettings shoppingCartSettings,
+            PayPalStandardPaymentService paymentService)
         {
             _genericAttributeService = genericAttributeService;
             _orderProcessingService = orderProcessingService;
@@ -72,6 +75,7 @@ namespace Nop.Plugin.Payments.PayPalStandard.Controllers
             _webHelper = webHelper;
             _workContext = workContext;
             _shoppingCartSettings = shoppingCartSettings;
+            _paymentService = paymentService;
         }
 
         #endregion
@@ -324,6 +328,34 @@ namespace Nop.Plugin.Payments.PayPalStandard.Controllers
                 return RedirectToRoute("OrderDetails", new { orderId = order.Id });
 
             return RedirectToRoute("Homepage");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RePostPayment(PaymentRePostModel model)
+        {
+            var order = await _orderService.GetOrderByIdAsync(model.OrderId);
+            var customer = await _workContext.GetCurrentCustomerAsync();
+            if (order == null || order.Deleted || customer.Id != order.CustomerId)
+            {
+                return Challenge();
+            }
+
+            if (!await _paymentService.CanRePostProcessPaymentAsync(order))
+            {
+                return RedirectToRoute("OrderDetails", new { orderId = model.OrderId });
+            }
+
+            await _paymentService.PostProcessPaymentAsync(order);
+
+            if (_webHelper.IsRequestBeingRedirected || _webHelper.IsPostBeingDone)
+            {
+                //redirection or POST has been done in PostProcessPayment
+                return Content("Redirected");
+            }
+
+            //if no redirection has been done (to a third-party payment page)
+            //theoretically it's not possible
+            return RedirectToRoute("OrderDetails", new { orderId = model.OrderId });
         }
 
         #endregion

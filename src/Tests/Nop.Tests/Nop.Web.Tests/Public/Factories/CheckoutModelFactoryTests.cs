@@ -188,7 +188,7 @@ namespace Nop.Tests.Nop.Web.Tests.Public.Factories
         {
             var model = await _checkoutModelFactory.PreparePaymentInfoModelAsync(_paymentMethod);
 
-            model.PaymentViewComponentType.Should().Be(_paymentMethod.GetPublicViewComponentType());
+            model.PaymentViewComponentType.Should().Be(_paymentMethod.GetPaymentInfoViewComponentType());
             model.DisplayOrderTotals.Should().Be(_orderSettings.OnePageCheckoutDisplayOrderTotalsOnPaymentInfoTab);
         }
 
@@ -217,7 +217,7 @@ namespace Nop.Tests.Nop.Web.Tests.Public.Factories
         [Test]
         public void PrepareCheckoutCompletedModelShouldRaiseExceptionIfOrderIsNull()
         {
-            Assert.Throws<ArgumentNullException>(() =>
+            Assert.Throws<AggregateException>(() =>
                 _checkoutModelFactory.PrepareCheckoutCompletedModelAsync(null).Wait());
         }
 
