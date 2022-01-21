@@ -367,6 +367,12 @@ namespace Nop.Plugin.Payments.PayPalCommerce
         public Type GetOrderDetailsViewComponentType() => null;
 
         /// <summary>
+        /// Gets the <see cref="Type"/> of the <see cref="ViewComponent"/> for displaying plugin in admin backoffice (in order details edit page)
+        /// </summary>
+        /// <returns>The <see cref="Type"/> of the <see cref="ViewComponent"/>.</returns>
+        public Type GetAdminOrderDetailsViewComponentType() => null;
+
+        /// <summary>
         /// Gets widget zones where this widget should be rendered
         /// </summary>
         /// <returns>

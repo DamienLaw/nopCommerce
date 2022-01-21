@@ -626,6 +626,12 @@ namespace Nop.Web.Areas.Admin.Factories
 
             //recurring payment record
             model.RecurringPaymentId = (await _orderService.SearchRecurringPaymentsAsync(initialOrderId: order.Id, showHidden: true)).FirstOrDefault()?.Id ?? 0;
+
+            var customer = await _customerService.GetCustomerByIdAsync(order.CustomerId);
+            var paymentMethod = await _paymentPluginManager
+                .LoadPluginBySystemNameAsync(order.PaymentMethodSystemName, customer, order.Id);
+
+            model.PaymentViewComponentType = paymentMethod?.GetAdminOrderDetailsViewComponentType();
         }
 
         /// <summary>

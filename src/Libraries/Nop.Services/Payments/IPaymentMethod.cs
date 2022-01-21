@@ -134,6 +134,12 @@ namespace Nop.Services.Payments
         Type GetOrderDetailsViewComponentType();
 
         /// <summary>
+        /// Gets the <see cref="Type"/> of the <see cref="ViewComponent"/> for displaying plugin in admin backoffice (in order details edit page)
+        /// </summary>
+        /// <returns>The <see cref="Type"/> of the <see cref="ViewComponent"/>.</returns>
+        Type GetAdminOrderDetailsViewComponentType();
+
+        /// <summary>
         /// Gets a payment method description that will be displayed on checkout pages in the public store
         /// </summary>
         /// <returns>A task that represents the asynchronous operation</returns>

@@ -660,6 +660,12 @@
                     <div class="form-text-row">@Model.PaymentStatus</div>
                 </div>
             </div>
+            @if (Model.PaymentViewComponentType != null)
+            {
+                <div class="order-details-payment-method">
+                    @await Component.InvokeAsync(Model.PaymentViewComponentType, new { orderId = Model.Id })
+                </div>
+            }
             @if (Model.CanCapture || Model.CanMarkOrderAsPaid || Model.CanRefund || Model.CanRefundOffline ||
               Model.CanPartiallyRefund || Model.CanPartiallyRefundOffline || Model.CanVoid || Model.CanVoidOffline)
             {
