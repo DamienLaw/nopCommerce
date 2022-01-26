@@ -146,12 +146,14 @@ namespace Nop.Tests.Nop.Services.Tests.Payments
         /// <returns>The <see cref="Type"/> of the <see cref="ViewComponent"/>.</returns>
         public Type GetCheckoutCompletedViewComponentType() => null;
 
+        public Type GetAdminOrderDetailsViewComponentType() => null;
+
         /// <summary>
         /// Gets the <see cref="Type"/> of the <see cref="ViewComponent"/> for displaying plugin in public store (in order details page)
         /// </summary>
         /// <returns>The <see cref="Type"/> of the <see cref="ViewComponent"/>.</returns>
         public Type GetOrderDetailsViewComponentType() => null;
-
+        
         public Task<string> GetPaymentMethodDescriptionAsync()
         {
             return Task.FromResult(PaymentMethodDescription);
